@@ -201,6 +201,45 @@ function sendSMSOTP(session_id) {
 
 }
 
+/*
+ * Invoke the endpoint to send OTP SMS.
+ */
+function sendsiSMSOTP(session_id) {
+
+	var input=document.getElementById('smsotp').value;
+	if(input && input.length>3) {
+		otpError(false,"");
+		var data = {};
+		data.session_id = session_id;
+		data.otp = SHA256(input);
+		var json = JSON.stringify(data);
+		$.ajax({
+			type: "post",
+			url: "/sessionupdater/tnspoints/endpoint/serverinitiated/smsotp/response",
+			async: true,
+			cache: false,
+			data: json,
+			contentType: "application/json",
+			success: function (result) {
+			}, statusCode: {
+				200: function (response) {
+					otpError(false,"");
+				},
+				403: function (response) {
+					otpError(true,error_messages.mismatch);
+				},
+				400: function (response) {
+					otpError(true,error_messages.error_process);
+				}
+			}
+		});
+		document.getElementById("smsotpsubmit").disabled = true;
+	}else{
+		otpError(true,error_messages.invalid);
+	}
+
+}
+
 function otpError(show,msg) {
 	var erromsg = document.getElementById('otperror');
 	if(show){

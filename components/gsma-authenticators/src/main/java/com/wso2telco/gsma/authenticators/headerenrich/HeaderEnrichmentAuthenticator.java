@@ -202,7 +202,7 @@ public class HeaderEnrichmentAuthenticator extends AbstractApplicationAuthentica
                         context.setCurrentAuthenticator(getName());
                         return AuthenticatorFlowStatus.INCOMPLETE;
                     }
-                }else if (!isRegistering && StringUtils.isNotEmpty(msisdn)) {
+                }else if (!isRegistering && StringUtils.isNotEmpty(msisdn) && !isAPIConsent && !isAttribute) {
 
                     attributeSet = AttributeShareFactory.getAttributeSharable(context.getProperty(Constants
                             .TRUSTED_STATUS).toString()).getAttributeShareDetails(context);

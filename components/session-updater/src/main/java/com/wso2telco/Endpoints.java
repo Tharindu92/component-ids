@@ -917,6 +917,18 @@ public class Endpoints {
         return Response.status(200).entity(responseString).build();
     }
 
+    @POST
+    @Path("/serverinitiated/smsotp/response")
+    @Produces("text/plain")
+    public Response serverInitiatedSmsOTPConfirm(String jsonBody)
+            throws SQLException, CommonAuthenticatorException, ConfigurationException, IOException, UserStoreException {
+        log.info(jsonBody);
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        org.json.JSONObject jsonObj = new org.json.JSONObject(jsonBody);
+
+        return Response.status(200).entity("test").build();
+    }
+
     @GET
     @Path("/serverinitiated/api/sms/response/{id}")
     @Produces("text/plain")

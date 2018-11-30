@@ -236,8 +236,8 @@ public class ServerInitiatedSMSOTPAuthenticator extends AbstractApplicationAuthe
 
             String encryptedContextIdentifier = AESencrp.encrypt(context.getContextIdentifier());
             //String messageURL = connectConfig.getSmsConfig().getAuthUrl() + Constants.AUTH_URL_ID_PREFIX;
-            String messageURL =  mobileConnectConfigs.getBackChannelConfig().getSmsCallbackUrl() + Constants.AUTH_URL_ID_PREFIX; //todo: add to config
-
+            String messageURL =  mobileConnectConfigs.getBackChannelConfig().getSmsOTPCallbackUrl(); //todo: add to config
+            StringBuilder msgUrl = new StringBuilder(messageURL);
 
             Map<String, String> paramMap = Util.createQueryParamMap(queryParams);
             String client_id = paramMap.get(Constants.CLIENT_ID);
@@ -257,7 +257,8 @@ public class ServerInitiatedSMSOTPAuthenticator extends AbstractApplicationAuthe
                 // This is done to shorten the message URL as much as possible.
                 log.info("Generating hash key for the SMS");
                 String hashForContextId = getHashForContextId(encryptedContextIdentifier);
-                messageURL += hashForContextId;
+                msgUrl.append("?id=").append(hashForContextId);
+                messageURL = msgUrl.toString();
                 DBUtils.insertHashKeyContextIdentifierMapping(hashForContextId, context.getContextIdentifier());
             }
 
